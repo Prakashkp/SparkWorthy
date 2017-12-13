@@ -1,4 +1,6 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { Pro } from '@ionic/pro';
+
+import { NgModule, ErrorHandler, Injectable, Injector } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { FormsModule,ReactiveFormsModule } from "@angular/forms";
 import { MyApp } from './app.component';
@@ -59,7 +61,9 @@ import { ImgcacheService }    from '../global/services/';
 import {Autosize} from 'ionic2-autosize';
 import {AutosizeModule} from 'ionic2-autosize';
 import {SettingsModelPage} from "../pages/settings-model/settings-model";
-
+const IonicPro = Pro.init('a0419cc3', {
+  appVersion: "0.0.1"
+});
 
 @NgModule({
   declarations: [
@@ -133,7 +137,28 @@ import {SettingsModelPage} from "../pages/settings-model/settings-model";
     LazyImgComponent,
     SettingsModelPage
   ],
-  providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler }, ImgcacheService,
+  providers: [{ provide: ErrorHandler, useClass: MyErrorHandler }, ImgcacheService,
   ValidationService,Storage,DatePicker,Network,SQLitePorter,LocalNotifications,Toast,SQLite,HTTP,FilePath,Diagnostic,File,Transfer,Contacts,Camera,SocialSharing,Geolocation]
 })
 export class AppModule { }
+
+@Injectable()
+export class MyErrorHandler implements ErrorHandler {
+  ionicErrorHandler: IonicErrorHandler;
+
+  constructor(injector: Injector) {
+    try {
+      this.ionicErrorHandler = injector.get(IonicErrorHandler);
+    } catch(e) {
+      // Unable to get the IonicErrorHandler provider, ensure 
+      // IonicErrorHandler has been added to the providers list below
+    }
+  }
+
+  handleError(err: any): void {
+    IonicPro.monitoring.handleNewError(err);
+    // Remove this if you want to disable Ionic's auto exception handling
+    // in development mode.
+    this.ionicErrorHandler && this.ionicErrorHandler.handleError(err);
+  }
+}

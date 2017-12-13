@@ -38,6 +38,7 @@
     "@ionic-native/status-bar": "^3.1.0",
     "@ionic-native/toast": "^3.5.0",
     "@ionic-native/transfer": "^3.2.1",
+    "@ionic/pro": "^1.0.16",
     "@ionic/storage": "2.0.0",
     "cordova": "^7.1.0",
     "cordova-android": "6.3.0",
